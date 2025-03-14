@@ -1,0 +1,4 @@
+networks:
+  default:
+    name: ${DOCKER_EXT_NETWORK}
+    external: true

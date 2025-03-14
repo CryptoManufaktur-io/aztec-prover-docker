@@ -1,0 +1,65 @@
+x-logging: &logging
+  logging:
+    driver: json-file
+    options:
+      max-size: 100m
+      max-file: "3"
+      tag: '{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}'
+
+services:
+  broker:
+    restart: unless-stopped
+    stop_grace_period: 1m
+    image: ${AZTEC_REPO}:${AZTEC_TAG}
+    pull_policy: always
+    volumes:
+      - aztec-broker-data:/data
+    environment:
+      LOG_LEVEL: ${LOG_LEVEL}
+      AZTEC_PORT: ${BROKER_PORT}
+      DATA_DIRECTORY: /data
+      DATA_STORE_MAP_SIZE_KB: 134217728
+    command: >
+      node --no-warnings /usr/src/yarn-project/aztec/dest/bin/index.js
+      start --prover-broker
+    <<: *logging
+
+  node: 
+    restart: unless-stopped
+    stop_grace_period: 1m
+    image: ${AZTEC_REPO}:${AZTEC_TAG}
+    pull_policy: always
+    volumes:
+      - aztec-node-data:/data
+    ports:
+      - ${P2P_PORT}:${P2P_PORT}/udp
+      - ${P2P_PORT}:${P2P_PORT}/tcp
+    environment:
+      LOG_LEVEL: ${LOG_LEVEL}
+      PROVER_BROKER_HOST: ${BROKER_NODE}
+      P2P_ENABLED: "true"
+      P2P_TCP_ANNOUNCE_ADDR: "${PUBLIC_IP_ADDRESS:?error}:${P2P_PORT}"
+      P2P_UDP_ANNOUNCE_ADDR: "${PUBLIC_IP_ADDRESS:?error}:${P2P_PORT}"
+      L1_CHAIN_ID: ${L1_CHAIN_ID}
+      L1_FIXED_PRIORITY_FEE_PER_GAS: ${L1_FIXED_PRIORITY_FEE_PER_GAS}
+      L1_GAS_LIMIT_BUFFER_PERCENTAGE: ${L1_GAS_LIMIT_BUFFER_PERCENTAGE}
+      L1_GAS_PRICE_MAX: ${L1_GAS_PRICE_MAX}
+      AZTEC_SLOT_DURATION: ${AZTEC_SLOT_DURATION}
+      AZTEC_EPOCH_DURATION: ${AZTEC_EPOCH_DURATION}
+      AZTEC_PROOF_SUBMISSION_WINDOW: ${AZTEC_PROOF_SUBMISSION_WINDOW}
+      BOOTSTRAP_NODES: ${BOOTSTRAP_NODES}
+      PROVER_PUBLISHER_PRIVATE_KEY: "${L1_WALLET_PRIVATE_KEY:?error}"
+      REGISTRY_CONTRACT_ADDRESS: ${REGISTRY_CONTRACT}
+      ETHEREUM_HOSTS: ${L1_RPC}
+      L1_CONSENSUS_HOST_URL: ${L1_REST}
+      TEST_ACCOUNTS: "false"
+      DATA_DIRECTORY: /data
+      DATA_STORE_MAP_SIZE_KB: 134217728
+    command: >
+      node --no-warnings /usr/src/yarn-project/aztec/dest/bin/index.js
+      start --prover-node --archiver
+    <<: *logging
+
+volumes:
+  aztec-broker-data:
+  aztec-node-data:

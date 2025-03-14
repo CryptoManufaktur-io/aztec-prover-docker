@@ -1,0 +1,5 @@
+.env*
+*.swp
+*.bak
+*.original
+custom.yml

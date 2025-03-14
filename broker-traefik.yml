@@ -1,0 +1,9 @@
+services:
+  broker:    
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.${BROKER_HOST}.service=${BROKER_HOST}
+      - traefik.http.routers.${BROKER_HOST}.entrypoints=websecure
+      - traefik.http.routers.${BROKER_HOST}.rule=Host(`${BROKER_HOST}.${DOMAIN}`)
+      - traefik.http.routers.${BROKER_HOST}.tls.certresolver=letsencrypt
+      - traefik.http.services.${BROKER_HOST}.loadbalancer.server.port=${BROKER_PORT}
