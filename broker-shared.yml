@@ -2,4 +2,4 @@
 services:
   broker:
     ports:
-      - ${BROKER_PORT:-8080}:${BROKER_PORT:-8080}/tcp
+      - ${SHARE_IP:-}:${BROKER_PORT:-8080}:${BROKER_PORT:-8080}/tcp
