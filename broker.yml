@@ -19,6 +19,13 @@ services:
       AZTEC_PORT: ${BROKER_PORT}
       DATA_DIRECTORY: /data
       DATA_STORE_MAP_SIZE_KB: 134217728
+      REGISTRY_CONTRACT_ADDRESS: ${REGISTRY_CONTRACT}
+      ETHEREUM_HOSTS: ${L1_RPC}
+      L1_CONSENSUS_HOST_URL: ${L1_REST}
+      L1_CHAIN_ID: ${L1_CHAIN_ID}
+      PROVER_BROKER_POLL_INTERVAL_MS: 1000
+      PROVER_BROKER_JOB_TIMEOUT_MS: 30000
+      PROVER_BROKER_JOB_MAX_RETRIES: 3
     command: >
       node --no-warnings /usr/src/yarn-project/aztec/dest/bin/index.js
       start --prover-broker
