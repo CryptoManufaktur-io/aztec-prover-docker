@@ -61,6 +61,7 @@ services:
       ETHEREUM_HOSTS: ${L1_RPC}
       L1_CONSENSUS_HOST_URL: ${L1_REST}
       TEST_ACCOUNTS: "true"
+      PROVER_REAL_PROOFS: "true"
       DATA_DIRECTORY: /data
       DATA_STORE_MAP_SIZE_KB: 134217728
     command: >
