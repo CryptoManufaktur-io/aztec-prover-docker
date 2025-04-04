@@ -30,7 +30,7 @@ services:
       start --prover-broker
     <<: *logging
 
-  node: 
+  node:
     restart: unless-stopped
     stop_grace_period: 1m
     image: ${AZTEC_REPO}:${AZTEC_TAG}

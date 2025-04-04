@@ -1,5 +1,5 @@
 services:
-  broker:    
+  broker:
     labels:
       - traefik.enable=true
       - traefik.http.routers.${BROKER_HOST}.service=${BROKER_HOST}
