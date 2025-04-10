@@ -17,9 +17,8 @@ services:
       PROVER_BROKER_HOST: ${BROKER_NODE}
       PROVER_AGENT_COUNT: ${PROVER_AGENT_COUNT}
       PROVER_AGENT_POLL_INTERVAL_MS: ${PROVER_AGENT_POLL_INTERVAL_MS}
-      PROVER_REAL_PROOFS: "true"
       PROVER_ID: ${PROVER_ID:?error}
     command: >
       node --no-warnings /usr/src/yarn-project/aztec/dest/bin/index.js
-      start --prover-agent
+      start --prover-agent --network ${NETWORK}
     <<: *logging
