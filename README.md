@@ -41,6 +41,11 @@ The broker can be exposed directly to the host or via traefik. In either case, i
 The validator/sequencer is stand-alone. While it is possible to have the prover node use the sequencer node, instead
 of having its own P2P, we've opted not to do that. That way, the prover does not depend on the sequencer being live.
 
+## Customization
+
+`custom.yml` is not tracked by git and can be used to override anything in the provided yml files. If you use it,
+add it to `COMPOSE_FILE` in `.env`
+
 ## Version
 
 Aztec Prover Docker uses a semver scheme.
