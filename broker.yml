@@ -52,6 +52,7 @@ services:
       BLOB_SINK_URL: ${BLOB_SINK_URL}
       DATA_DIRECTORY: /data
       DATA_STORE_MAP_SIZE_KB: 134217728
+      P2P_PORT: ${P2P_PORT}
     command: >
       node --no-warnings /usr/src/yarn-project/aztec/dest/bin/index.js
       start --prover-node --archiver --network ${NETWORK} --p2p.p2pIp ${PUBLIC_IP_ADDRESS:?error}
