@@ -12,18 +12,22 @@ services:
     stop_grace_period: 1m
     image: ${AZTEC_REPO}:${AZTEC_TAG}
     pull_policy: always
+    volumes:
+      - aztec-validator-data:/data
+    ports:
+      - ${VALIDATOR_P2P_PORT}:${VALIDATOR_P2P_PORT}/udp
+      - ${VALIDATOR_P2P_PORT}:${VALIDATOR_P2P_PORT}/tcp
     environment:
       LOG_LEVEL: ${LOG_LEVEL}
-      PROVER_BROKER_HOST: ${BROKER_NODE}
-      PROVER_AGENT_COUNT: ${PROVER_AGENT_COUNT}
-      PROVER_AGENT_POLL_INTERVAL_MS: ${PROVER_AGENT_POLL_INTERVAL_MS}
-      PROVER_REAL_PROOFS: "true"
-      PROVER_ID: ${PROVER_ID:?error}
-    entrypoint: >
-      sh -c '
-      test -z "$PEER_ID_PRIVATE_KEY" -a ! -f /var/lib/aztec/p2p-private-key && node /usr/src/yarn-project/aztec/dest/bin/index.js generate-p2p-private-key | head -1 | cut -d" " -f 3 | tee /var/lib/aztec/p2p-private-key || echo "Re-using existing P2P private key"
-      test -z "$PEER_ID_PRIVATE_KEY" && export PEER_ID_PRIVATE_KEY=$(cat /var/lib/aztec/p2p-private-key)
-      node --no-warnings /usr/src/yarn-project/aztec/dest/bin/index.js start --node --archiver --sequencer'
-    volumes:
-      - aztec_data:/var/lib/aztec
+      BLOB_SINK_URL: ${BLOB_SINK_URL}
+      COINBASE: ${COINBASE}
+      DATA_DIRECTORY: /data
+    command: >
+      node --no-warnings /usr/src/yarn-project/aztec/dest/bin/index.js
+      start --node --archiver --network ${NETWORK} --p2p.p2pIp ${PUBLIC_IP_ADDRESS:?error}
+      --p2p.p2pPort ${VALIDATOR_P2P_PORT} --l1-rpc-urls ${L1_RPC} --l1-consensus-host-urls ${L1_REST}
+      --sequencer.validatorPrivateKey ${VALIDATOR_PRIVATE_KEY}
     <<: *logging
+
+volumes:
+  aztec-validator-data:
