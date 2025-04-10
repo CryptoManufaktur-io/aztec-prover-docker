@@ -22,6 +22,7 @@ services:
       BLOB_SINK_URL: ${BLOB_SINK_URL}
       COINBASE: ${COINBASE}
       DATA_DIRECTORY: /data
+      P2P_PORT: ${VALIDATOR_P2P_PORT}
     command: >
       node --no-warnings /usr/src/yarn-project/aztec/dest/bin/index.js
       start --network ${NETWORK} --p2p.p2pIp ${PUBLIC_IP_ADDRESS:?error}
