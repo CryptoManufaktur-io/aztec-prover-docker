@@ -42,13 +42,9 @@ services:
       - ${P2P_PORT}:${P2P_PORT}/tcp
     environment:
       LOG_LEVEL: ${LOG_LEVEL}
-      PROVER_BROKER_HOST: ${BROKER_NODE}
       #L1_FIXED_PRIORITY_FEE_PER_GAS: ${L1_FIXED_PRIORITY_FEE_PER_GAS}
       #L1_GAS_LIMIT_BUFFER_PERCENTAGE: ${L1_GAS_LIMIT_BUFFER_PERCENTAGE}
       #L1_GAS_PRICE_MAX: ${L1_GAS_PRICE_MAX}
-      PROVER_PUBLISHER_PRIVATE_KEY: "${L1_WALLET_PRIVATE_KEY:?error}"
-      ETHEREUM_HOSTS: ${L1_RPC}
-      L1_CONSENSUS_HOST_URL: ${L1_REST}
       BLOB_SINK_URL: ${BLOB_SINK_URL}
       DATA_DIRECTORY: /data
       DATA_STORE_MAP_SIZE_KB: 134217728
@@ -56,7 +52,9 @@ services:
     command: >
       node --no-warnings /usr/src/yarn-project/aztec/dest/bin/index.js
       start --prover-node --archiver --network ${NETWORK} --p2p.p2pIp ${PUBLIC_IP_ADDRESS:?error}
-      --p2p.p2pPort ${P2P_PORT}
+      --p2p.p2pPort ${P2P_PORT} --l1-rpc-urls ${L1_RPC} --l1-consensus-host-urls ${L1_REST}
+      --proverAgent.proverBrokerUrl ${BROKER_NODE}
+      --proverNode.publisherPrivateKey ${L1_WALLET_PRIVATE_KEY:?error}
     <<: *logging
 
 volumes:
