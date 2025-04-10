@@ -19,15 +19,13 @@ services:
       AZTEC_PORT: ${BROKER_PORT}
       DATA_DIRECTORY: /data
       DATA_STORE_MAP_SIZE_KB: 134217728
-      REGISTRY_CONTRACT_ADDRESS: ${REGISTRY_CONTRACT}
       ETHEREUM_HOSTS: ${L1_RPC}
-      L1_CHAIN_ID: ${L1_CHAIN_ID}
       PROVER_BROKER_POLL_INTERVAL_MS: 1000
       PROVER_BROKER_JOB_TIMEOUT_MS: 30000
       PROVER_BROKER_JOB_MAX_RETRIES: 3
     command: >
       node --no-warnings /usr/src/yarn-project/aztec/dest/bin/index.js
-      start --prover-broker
+      start --prover-broker --network ${NETWORK}
     <<: *logging
 
   node:
@@ -48,25 +46,17 @@ services:
       P2P_ENABLED: "true"
       P2P_TCP_ANNOUNCE_ADDR: "${PUBLIC_IP_ADDRESS:?error}:${P2P_PORT}"
       P2P_UDP_ANNOUNCE_ADDR: "${PUBLIC_IP_ADDRESS:?error}:${P2P_PORT}"
-      L1_CHAIN_ID: ${L1_CHAIN_ID}
-      L1_FIXED_PRIORITY_FEE_PER_GAS: ${L1_FIXED_PRIORITY_FEE_PER_GAS}
-      L1_GAS_LIMIT_BUFFER_PERCENTAGE: ${L1_GAS_LIMIT_BUFFER_PERCENTAGE}
-      L1_GAS_PRICE_MAX: ${L1_GAS_PRICE_MAX}
-      AZTEC_SLOT_DURATION: ${AZTEC_SLOT_DURATION}
-      AZTEC_EPOCH_DURATION: ${AZTEC_EPOCH_DURATION}
-      AZTEC_PROOF_SUBMISSION_WINDOW: ${AZTEC_PROOF_SUBMISSION_WINDOW}
-      BOOTSTRAP_NODES: ${BOOTSTRAP_NODES}
+      #L1_FIXED_PRIORITY_FEE_PER_GAS: ${L1_FIXED_PRIORITY_FEE_PER_GAS}
+      #L1_GAS_LIMIT_BUFFER_PERCENTAGE: ${L1_GAS_LIMIT_BUFFER_PERCENTAGE}
+      #L1_GAS_PRICE_MAX: ${L1_GAS_PRICE_MAX}
       PROVER_PUBLISHER_PRIVATE_KEY: "${L1_WALLET_PRIVATE_KEY:?error}"
-      REGISTRY_CONTRACT_ADDRESS: ${REGISTRY_CONTRACT}
       ETHEREUM_HOSTS: ${L1_RPC}
       L1_CONSENSUS_HOST_URL: ${L1_REST}
-      TEST_ACCOUNTS: "true"
-      PROVER_REAL_PROOFS: "true"
       DATA_DIRECTORY: /data
       DATA_STORE_MAP_SIZE_KB: 134217728
     command: >
       node --no-warnings /usr/src/yarn-project/aztec/dest/bin/index.js
-      start --prover-node --archiver
+      start --prover-node --archiver --network ${NETWORK}
     <<: *logging
 
 volumes:
