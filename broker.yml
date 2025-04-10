@@ -55,6 +55,7 @@ services:
     command: >
       node --no-warnings /usr/src/yarn-project/aztec/dest/bin/index.js
       start --prover-node --archiver --network ${NETWORK} --p2p.p2pIp ${PUBLIC_IP_ADDRESS:?error}
+      --p2p.p2pPort ${P2P_PORT}
     <<: *logging
 
 volumes:
