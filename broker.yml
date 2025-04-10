@@ -16,16 +16,22 @@ services:
       - aztec-broker-data:/data
     environment:
       LOG_LEVEL: ${LOG_LEVEL}
-      AZTEC_PORT: ${BROKER_PORT}
-      DATA_DIRECTORY: /data
-      DATA_STORE_MAP_SIZE_KB: 134217728
-      ETHEREUM_HOSTS: ${L1_RPC}
-      PROVER_BROKER_POLL_INTERVAL_MS: 1000
-      PROVER_BROKER_JOB_TIMEOUT_MS: 30000
-      PROVER_BROKER_JOB_MAX_RETRIES: 3
-    command: >
-      node --no-warnings /usr/src/yarn-project/aztec/dest/bin/index.js
-      start --prover-broker --network ${NETWORK}
+    entrypoint:
+      - node
+      - --no-warnings
+      - /usr/src/yarn-project/aztec/dest/bin/index.js
+      - start
+      - --data-directory
+      - /data
+      - --data-store-map-size-kb
+      - "134217728"
+      - --network
+      - ${NETWORK}
+      - --port
+      - ${BROKER_PORT}
+      - --l1-rpc-urls
+      - ${L1_RPC}
+      - --prover-broker
     <<: *logging
 
   node:
@@ -46,15 +52,32 @@ services:
       #L1_GAS_LIMIT_BUFFER_PERCENTAGE: ${L1_GAS_LIMIT_BUFFER_PERCENTAGE}
       #L1_GAS_PRICE_MAX: ${L1_GAS_PRICE_MAX}
       BLOB_SINK_URL: ${BLOB_SINK_URL}
-      DATA_DIRECTORY: /data
-      DATA_STORE_MAP_SIZE_KB: 134217728
       P2P_PORT: ${P2P_PORT}
-    command: >
-      node --no-warnings /usr/src/yarn-project/aztec/dest/bin/index.js
-      start --prover-node --archiver --network ${NETWORK} --p2p.p2pIp ${PUBLIC_IP_ADDRESS:?error}
-      --p2p.p2pPort ${P2P_PORT} --l1-rpc-urls ${L1_RPC} --l1-consensus-host-urls ${L1_REST}
-      --proverAgent.proverBrokerUrl ${BROKER_NODE}
-      --proverNode.publisherPrivateKey ${L1_WALLET_PRIVATE_KEY:?error}
+    entrypoint:
+      - node
+      - --no-warnings
+      - /usr/src/yarn-project/aztec/dest/bin/index.js
+      - start
+      - --data-directory
+      - /data
+      - --data-store-map-size-kb
+      - "134217728"
+      - --network
+      - ${NETWORK}
+      - --p2p.p2pIp
+      - ${PUBLIC_IP_ADDRESS}
+      - --p2p.p2pPort
+      - ${P2P_PORT}
+      - --l1-rpc-urls
+      - ${L1_RPC}
+      - --l1-consensus-host-urls
+      - ${L1_REST}
+      - --proverAgent.proverBrokerUrl
+      - ${BROKER_NODE}
+      - --proverNode.publisherPrivateKey
+      - ${L1_WALLET_PRIVATE_KEY}
+      - --prover-node
+      - --archiver
     <<: *logging
 
 volumes:
