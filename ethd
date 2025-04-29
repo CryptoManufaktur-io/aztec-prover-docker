@@ -18,14 +18,18 @@ version() {
 # Client versions
   case "${__value}" in
     *broker.yml* )
-      echo -n "Aztec Prover Broker"
+      echo -n "Aztec Prover Broker "
       __docompose exec broker node --no-warnings /usr/src/yarn-project/aztec/dest/bin/index.js -V
-      echo -n "Aztec Prover Node"
+      echo -n "Aztec Prover Node "
       __docompose exec node node --no-warnings /usr/src/yarn-project/aztec/dest/bin/index.js -V
       ;;&
     *agent.yml* )
-      echo -n "Aztec Prover Broker"
-      __docompose exec broker node --no-warnings /usr/src/yarn-project/aztec/dest/bin/index.js -V
+      echo -n "Aztec Prover Agent "
+      __docompose exec agent node --no-warnings /usr/src/yarn-project/aztec/dest/bin/index.js -V
+     ;;&
+    *validator.yml* )
+      echo -n "Aztec Validator "
+      __docompose exec validator node --no-warnings /usr/src/yarn-project/aztec/dest/bin/index.js -V
      ;;&
   esac
 }
