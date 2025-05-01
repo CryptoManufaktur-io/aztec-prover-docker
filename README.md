@@ -24,6 +24,12 @@ address.
 
 Make sure that `COMPOSE_FILE` includes `validator.yml`
 
+Wait for the validator to be fully synced: Check with `./aztecd logs -f validator` and look for a message telling
+you that it's up and listening on the aztec port 8080, and has peers.
+
+Register the validator - Sepolia testnet only, a more flexible version is to be created:
+`./aztecd cmd run -it --rm register-validator`
+
 ## Install and updates
 
 - `./aztecd install` brings in docker-ce, if you don't have Docker installed already.
