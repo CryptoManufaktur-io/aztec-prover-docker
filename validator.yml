@@ -45,6 +45,7 @@ services:
       - --node
       - --archiver
       - --sequencer
+    command: ${SEQUENCER_EXTRAS}
     <<: *logging
 
   register-validator:
