@@ -632,14 +632,12 @@ space() {
 __check_disk_space() {
   __get_docker_free_space
 
-  if [[ "${__free_space}" -lt 52428800 ]]; then
+  if [[ "${__free_space}" -lt 5242880 ]]; then
     echo
-    echo "You have less than 50 GiB of free disk space:"
+    echo "You have less than 5 GiB of free disk space:"
     echo
     __display_docker_dir
     echo
-    echo "Pruning does not appear an option for your client mix."
-    echo "If total space is less than 1.8 TiB, consider cloning to a larger drive."
     __display_docker_volumes
   fi
 }
