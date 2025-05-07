@@ -14,6 +14,11 @@ services:
     pull_policy: always
     environment:
       LOG_LEVEL: ${LOG_LEVEL}
+    deploy:
+      resources:
+        limits:
+          cpus: ${PROVER_AGENT_CPUS:-32}
+          memory: ${PROVER_AGENT_MEM:-128G}
     entrypoint:
       - node
       - --no-warnings

@@ -46,7 +46,31 @@ services:
       - --node
       - --archiver
       - --sequencer
+    command: ${SEQUENCER_EXTRAS}
     <<: *logging
+
+  register-validator:
+    profiles: ["tools"]
+    restart: no
+    image: ${AZTEC_REPO}:${AZTEC_TAG}
+    pull_policy: always
+    entrypoint:
+      - node
+      - --no-warnings
+      - /usr/src/yarn-project/aztec/dest/bin/index.js
+      - add-l1-validator
+      - --private-key
+      - ${VALIDATOR_PRIVATE_KEY}
+      - --attester
+      - ${COINBASE}
+      - --proposer-eoa
+      - ${COINBASE}
+      - --l1-rpc-urls
+      - ${L1_RPC}
+      - --l1-chain-id
+      - "11155111"
+      - --staking-asset-handler
+      - 0xF739D03e98e23A7B65940848aBA8921fF3bAc4b2
 
 volumes:
   aztec-validator-data:

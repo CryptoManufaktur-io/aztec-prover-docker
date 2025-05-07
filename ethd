@@ -18,14 +18,18 @@ version() {
 # Client versions
   case "${__value}" in
     *broker.yml* )
-      echo -n "Aztec Prover Broker"
+      echo -n "Aztec Prover Broker "
       __docompose exec broker node --no-warnings /usr/src/yarn-project/aztec/dest/bin/index.js -V
-      echo -n "Aztec Prover Node"
+      echo -n "Aztec Prover Node "
       __docompose exec node node --no-warnings /usr/src/yarn-project/aztec/dest/bin/index.js -V
       ;;&
     *agent.yml* )
-      echo -n "Aztec Prover Broker"
-      __docompose exec broker node --no-warnings /usr/src/yarn-project/aztec/dest/bin/index.js -V
+      echo -n "Aztec Prover Agent "
+      __docompose exec agent node --no-warnings /usr/src/yarn-project/aztec/dest/bin/index.js -V
+     ;;&
+    *validator.yml* )
+      echo -n "Aztec Validator "
+      __docompose exec validator node --no-warnings /usr/src/yarn-project/aztec/dest/bin/index.js -V
      ;;&
   esac
 }
@@ -632,14 +636,12 @@ space() {
 __check_disk_space() {
   __get_docker_free_space
 
-  if [[ "${__free_space}" -lt 52428800 ]]; then
+  if [[ "${__free_space}" -lt 5242880 ]]; then
     echo
-    echo "You have less than 50 GiB of free disk space:"
+    echo "You have less than 5 GiB of free disk space:"
     echo
     __display_docker_dir
     echo
-    echo "Pruning does not appear an option for your client mix."
-    echo "If total space is less than 1.8 TiB, consider cloning to a larger drive."
     __display_docker_volumes
   fi
 }
