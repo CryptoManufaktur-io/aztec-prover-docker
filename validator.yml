@@ -14,6 +14,7 @@ services:
     pull_policy: always
     volumes:
       - aztec-validator-data:/data
+      - aztec-validator-crs:/root/.bb-crs
     ports:
       - ${VALIDATOR_P2P_PORT}:${VALIDATOR_P2P_PORT}/udp
       - ${VALIDATOR_P2P_PORT}:${VALIDATOR_P2P_PORT}/tcp
@@ -49,3 +50,4 @@ services:
 
 volumes:
   aztec-validator-data:
+  aztec-validator-crs:
