@@ -20,6 +20,7 @@ services:
       - ${VALIDATOR_P2P_PORT}:${VALIDATOR_P2P_PORT}/tcp
     environment:
       LOG_LEVEL: ${LOG_LEVEL}
+      OTEL_EXPORTER_OTLP_METRICS_ENDPOINT: ${OTEL_METRICS_ENDPOINT}
       BLOB_SINK_URL: ${BLOB_SINK_URL}
       P2P_PORT: ${VALIDATOR_P2P_PORT}
     entrypoint:
