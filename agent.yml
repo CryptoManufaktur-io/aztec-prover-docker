@@ -14,6 +14,7 @@ services:
     pull_policy: always
     environment:
       LOG_LEVEL: ${LOG_LEVEL}
+      OTEL_EXPORTER_OTLP_METRICS_ENDPOINT: ${OTEL_METRICS_ENDPOINT}
     deploy:
       resources:
         limits:
