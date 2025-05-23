@@ -34,6 +34,8 @@ services:
       - ${L1_RPC}
       - --prover-broker
     <<: *logging
+    labels:
+      - "com.centurylinklabs.watchtower.enable=${AZTEC_AUTOUPDATE:-false}"
 
   node:
     restart: unless-stopped
@@ -81,6 +83,8 @@ services:
       - --prover-node
       - --archiver
     <<: *logging
+    labels:
+      - "com.centurylinklabs.watchtower.enable=${AZTEC_AUTOUPDATE:-false}"
 
 volumes:
   aztec-broker-data:

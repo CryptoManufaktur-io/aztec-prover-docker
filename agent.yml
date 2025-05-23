@@ -37,6 +37,8 @@ services:
       - ${PROVER_AGENT_POLL_INTERVAL_MS}
       - --prover-agent
     <<: *logging
+    labels:
+      - "com.centurylinklabs.watchtower.enable=${AZTEC_AUTOUPDATE:-false}"
 
 volumes:
   aztec-agent-crs:
