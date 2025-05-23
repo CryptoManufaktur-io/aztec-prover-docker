@@ -49,6 +49,8 @@ services:
       - --sequencer
     command: ${SEQUENCER_EXTRAS}
     <<: *logging
+    labels:
+      - "com.centurylinklabs.watchtower.enable=${AZTEC_AUTOUPDATE:-false}"
 
   register-validator:
     profiles: ["tools"]
