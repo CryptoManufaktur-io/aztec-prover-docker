@@ -17,3 +17,5 @@ services:
       - --label-enable
       - --interval
       - "600"
+      - --include-restarting
+      - "true"
