@@ -16,4 +16,4 @@ services:
     command:
       - --label-enable
       - --interval
-      - 600
+      - "600"
