@@ -15,3 +15,5 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     command:
       - --label-enable
+      - --interval
+      - 600
