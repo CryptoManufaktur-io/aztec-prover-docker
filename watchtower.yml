@@ -9,7 +9,7 @@ x-logging: &logging
 services:
   watchtower:
     restart: unless-stopped
-    image: containrrr/watchtower:latest
+    image: nickfedor/watchtower:latest
     pull_policy: always
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
