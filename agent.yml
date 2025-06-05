@@ -36,6 +36,8 @@ services:
       - --proverAgent.proverAgentPollIntervalMs
       - ${PROVER_AGENT_POLL_INTERVAL_MS}
       - --prover-agent
+      - --auto-update
+      - config
     <<: *logging
     labels:
       - "com.centurylinklabs.watchtower.enable=${AZTEC_AUTOUPDATE:-false}"
