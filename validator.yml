@@ -47,6 +47,8 @@ services:
       - --node
       - --archiver
       - --sequencer
+      - --auto-update
+      - config
     command: ${SEQUENCER_EXTRAS}
     <<: *logging
     labels:

@@ -33,6 +33,8 @@ services:
       - --l1-rpc-urls
       - ${L1_RPC}
       - --prover-broker
+      - --auto-update
+      - config
     <<: *logging
     labels:
       - "com.centurylinklabs.watchtower.enable=${AZTEC_AUTOUPDATE:-false}"
@@ -82,6 +84,8 @@ services:
       - ${L1_WALLET_PRIVATE_KEY}
       - --prover-node
       - --archiver
+      - --auto-update
+      - config
     <<: *logging
     labels:
       - "com.centurylinklabs.watchtower.enable=${AZTEC_AUTOUPDATE:-false}"
