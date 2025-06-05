@@ -35,7 +35,22 @@ Register the validator - Sepolia testnet only, a more flexible version is to be 
 - `./aztecd install` brings in docker-ce, if you don't have Docker installed already.
 - `./aztecd up`
 
-To update the software, run `./aztecd update` and then `./aztecd up`
+To update the software manually, run `./aztecd update` and then `./aztecd up`
+
+### Auto-updates
+
+Aztec has a concept of auto-updates, where it will shut down the process if the rollup config changed and/or
+the required minimum version changed. However, under Docker Compose, the `pull-policy: always` does not
+apply when the container merely restarts: It needs to be recreated by Compose with `docker compose up -d` for
+the pull policy to grab an updated image.
+
+Aztec Prover Docker uses `--auto-update config` with Aztec, where it will terminate the process if the
+config changed but the required version did not, and offers watchtower to handle the Docker image update on a
+tag like `latest`. `watchtower.yml` should run with one and only one copy on the host in that case, and
+`AZTEC_AUTOUPDATE=true` should be set in `.env`, which it is by default.
+
+Note `AZTEC_AUTOUPDATE` only controls whether the Aztec images will be updated by watchtower. The auto-update
+function that does not pull a new image, `--auto-update config`, is always active.
 
 ## Architecture
 
