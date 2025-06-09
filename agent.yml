@@ -40,7 +40,7 @@ services:
       - config
     <<: *logging
     labels:
-      - "com.centurylinklabs.watchtower.enable=${AZTEC_AUTOUPDATE:-false}"
+      - com.centurylinklabs.watchtower.enable=${AZTEC_AUTOUPDATE:-false}
 
 volumes:
   aztec-agent-crs:
