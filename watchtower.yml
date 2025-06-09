@@ -18,4 +18,3 @@ services:
       - --interval
       - "600"
       - --include-restarting
-      - "true"
