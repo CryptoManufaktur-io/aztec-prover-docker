@@ -45,8 +45,8 @@ __env_migrate() {
     return 0
   fi
 
-  __old_vars=( )
-  __new_vars=( )
+  __old_vars=( VALIDATOR_PRIVATE_KEY )
+  __new_vars=( VALIDATOR_PRIVATE_KEYS )
 
   __var=ENV_VERSION
   __get_value_from_env "${__var}" "default.env" "__target_ver"

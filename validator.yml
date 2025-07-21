@@ -40,8 +40,10 @@ services:
       - ${L1_RPC}
       - --l1-consensus-host-urls
       - ${L1_REST}
-      - --sequencer.validatorPrivateKey
-      - ${VALIDATOR_PRIVATE_KEY}
+      - --sequencer.validatorPrivateKeys
+      - ${VALIDATOR_PRIVATE_KEYS}
+      - --sequencer.publisherPrivateKey
+      - ${L1_WALLET_PRIVATE_KEY}
       - --sequencer.coinbase
       - ${COINBASE}
       - --node
