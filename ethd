@@ -605,12 +605,12 @@ __display_docker_dir() {
 
 __display_docker_volumes() {
   echo
-  if [ -z "$(__dodocker volume ls -q -f "name=^$(basename "$(realpath .)")_[^_]+")" ]; then
+  if [ -z "$(__dodocker volume ls -q -f "name=^$(basename "$(realpath .)")[-_].+")" ]; then
     echo "There are no Docker volumes for this copy of ${__project_name}"
     echo
   else
     echo "Here are the Docker volumes used by this copy of ${__project_name} and their space usage:"
-    __dodocker system df -v | grep -A 500 "VOLUME NAME" | grep -E "^$(basename "$(dirname "$(realpath "${BASH_SOURCE[0]}")")")_[^_]+"
+    __dodocker system df -v | grep -A 500 "VOLUME NAME" | grep -E "^$(basename "$(dirname "$(realpath "${BASH_SOURCE[0]}")")")[-_].+"
     echo
   fi
   echo "If there is some mystery space being taken up, try \"sudo ncdu /\"."
