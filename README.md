@@ -16,16 +16,22 @@ If you want the broker node port exposed unencrypted to the host, use `broker-sh
 
 ## Quick setup for Sequencer / Validator
 
-Run `cp default.env .env`, then `nano .env`, and update values like `L1_RPC`, `L1_REST`, `VALIDATOR_PRIVATE_KEY`,
-`COINBASE`, and the `NETWORK` as well as the `BLOB_SINK_URL` and `PUBLIC_IP_ADDRESS`.
+Run `cp default.env .env`, then `nano .env`, and update values like `L1_RPC`, `L1_REST`, `VALIDATOR_PRIVATE_KEYS`,
+`L1_WALLET_PRIVATE_KEY`, `COINBASE`, and the `NETWORK` as well as the `PUBLIC_IP_ADDRESS`.
 
-`VALIDATOR_PRIVATE_KEY` is the private key of an L1 wallet, and will be used to pay gas. `COINBASE` is its public
-address.
+`L1_WALLET_PRIVATE_KEY` is the private key of an L1 wallet, and will be used to pay gas. `COINBASE` is its public
+address. This is the only wallet that needs to have ETH, even when multiple validators are active via the parameter
+below.
+
+`VALIDATOR_PRIVATE_KEYS` is a comma-separated list of L1 wallet private keys, one for each validator that should
+be run by the sequencer/validator process.
 
 Make sure that `COMPOSE_FILE` includes `validator.yml`
 
 Wait for the validator to be fully synced: Check with `./aztecd logs -f validator` and look for a message telling
 you that it's up and listening on the aztec port 8080, and has peers.
+
+NB: Registration is changing, README will be updated with new instructions
 
 Register the validator - Sepolia testnet only, a more flexible version is to be created:
 `./aztecd cmd run -it --rm register-validator`
@@ -71,4 +77,4 @@ add it to `COMPOSE_FILE` in `.env`
 
 Aztec Prover Docker uses a semver scheme.
 
-This is Aztec Prover Docker v1.1.0
+This is Aztec Prover Docker v2.0.0
