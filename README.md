@@ -19,12 +19,13 @@ If you want the broker node port exposed unencrypted to the host, use `broker-sh
 Run `cp default.env .env`, then `nano .env`, and update values like `L1_RPC`, `L1_REST`, `VALIDATOR_PRIVATE_KEYS`,
 `L1_WALLET_PRIVATE_KEY`, `COINBASE`, and the `NETWORK` as well as the `PUBLIC_IP_ADDRESS`.
 
-`L1_WALLET_PRIVATE_KEY` is the private key of an L1 wallet, and will be used to pay gas. `COINBASE` is its public
-address. This is the only wallet that needs to have ETH, even when multiple validators are active via the parameter
-below.
+`L1_WALLET_PRIVATE_KEY` is the private key of an L1 wallet, and will be used to pay gas. This is the only wallet that
+needs to have ETH, even when multiple validators are active via `VALIDATOR_PRIVATE_KEYS`.
+
+`COINBASE` is a public address, which you will receive block rewards on.
 
 `VALIDATOR_PRIVATE_KEYS` is a comma-separated list of L1 wallet private keys, one for each validator that should
-be run by the sequencer/validator process.
+be run by the sequencer/validator process. These wallets do not need to be funded with ETH.
 
 Make sure that `COMPOSE_FILE` includes `validator.yml`
 
