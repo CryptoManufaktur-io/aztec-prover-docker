@@ -33,9 +33,6 @@ you that it's up and listening on the aztec port 8080, and has peers.
 
 NB: Registration is changing, README will be updated with new instructions
 
-Register the validator - Sepolia testnet only, a more flexible version is to be created:
-`./aztecd cmd run -it --rm register-validator`
-
 ## Install and updates
 
 - `./aztecd install` brings in docker-ce, if you don't have Docker installed already.
