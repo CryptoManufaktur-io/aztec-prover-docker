@@ -32,7 +32,7 @@ Make sure that `COMPOSE_FILE` includes `validator.yml`
 Wait for the validator to be fully synced: Check with `./aztecd logs -f validator` and look for a message telling
 you that it's up and listening on the aztec port 8080, and has peers.
 
-NB: Registration is changing, README will be updated with new instructions
+You can register the validator with the Aztec testnet using zkPassport at https://testnet.aztec.network/
 
 ## Install and updates
 
