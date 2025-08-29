@@ -22,6 +22,8 @@ services:
         limits:
           cpus: ${PROVER_AGENT_CPUS:-32}
           memory: ${PROVER_AGENT_MEM:-128G}
+    ulimits:
+      core: 0  # Workaround for filling disk with cores
     entrypoint:
       - node
       - --no-warnings
