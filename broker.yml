@@ -80,7 +80,7 @@ services:
       - ${L1_REST}
       - --proverAgent.proverBrokerUrl
       - ${BROKER_NODE}
-      - --proverNode.publisherPrivateKey
+      - --proverNode.publisherPrivateKeys
       - ${L1_WALLET_PRIVATE_KEY}
       - --prover-node
       - --archiver
