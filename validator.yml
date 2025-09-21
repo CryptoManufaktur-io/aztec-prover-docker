@@ -42,7 +42,7 @@ services:
       - ${L1_REST}
       - --sequencer.validatorPrivateKeys
       - ${VALIDATOR_PRIVATE_KEYS}
-      - --sequencer.publisherPrivateKey
+      - --sequencer.publisherPrivateKeys
       - ${L1_WALLET_PRIVATE_KEY}
       - --sequencer.coinbase
       - ${COINBASE}

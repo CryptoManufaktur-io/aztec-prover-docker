@@ -75,4 +75,4 @@ add it to `COMPOSE_FILE` in `.env`
 
 Aztec Prover Docker uses a semver scheme.
 
-This is Aztec Prover Docker v2.0.0
+This is Aztec Prover Docker v3.0.0
