@@ -15,6 +15,7 @@ services:
     volumes:
       - aztec-validator-data:/data
       - aztec-validator-crs:/root/.bb-crs
+      - aztec-validator-keystore:/keystore
     ports:
       - ${VALIDATOR_P2P_PORT}:${VALIDATOR_P2P_PORT}/udp
       - ${VALIDATOR_P2P_PORT}:${VALIDATOR_P2P_PORT}/tcp
@@ -41,17 +42,21 @@ services:
       - ${L1_RPC}
       - --l1-consensus-host-urls
       - ${L1_REST}
-      - --sequencer.validatorPrivateKeys
-      - ${VALIDATOR_PRIVATE_KEYS}
-      - --sequencer.publisherPrivateKeys
-      - ${L1_WALLET_PRIVATE_KEY}
-      - --sequencer.coinbase
-      - ${COINBASE}
+      # Keys have all been moved to Keystore:
+      # https://docs.aztec.network/the_aztec_network/operation/keystore/creating_keystores 
+      #- --sequencer.validatorPrivateKeys
+      #- ${VALIDATOR_PRIVATE_KEYS}
+      #- --sequencer.publisherPrivateKeys
+      #- ${L1_WALLET_PRIVATE_KEY}
+      #- --sequencer.coinbase
+      #- ${COINBASE}
+      - --sequencer.keyStoreDirectory
+      - /keystore
       - --node
       - --archiver
       - --sequencer
       - --auto-update
-      - config
+      #- config
     command: ${SEQUENCER_EXTRAS}
     <<: *logging
     labels:
@@ -60,3 +65,4 @@ services:
 volumes:
   aztec-validator-data:
   aztec-validator-crs:
+  aztec-validator-keystore:
