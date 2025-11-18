@@ -55,7 +55,7 @@ services:
       - --node
       - --archiver
       - --sequencer
-      - --auto-update
+      - --auto-update false
       #- config
     command: ${SEQUENCER_EXTRAS}
     <<: *logging
