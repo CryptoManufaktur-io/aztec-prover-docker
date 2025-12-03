@@ -15,7 +15,7 @@ services:
     volumes:
       - aztec-validator-data:/data
       - aztec-validator-crs:/root/.bb-crs
-      - aztec-validator-keystore:/keystore
+      - ./aztec-validator-keystore:/keystore
     ports:
       - ${VALIDATOR_P2P_PORT}:${VALIDATOR_P2P_PORT}/udp
       - ${VALIDATOR_P2P_PORT}:${VALIDATOR_P2P_PORT}/tcp
@@ -56,4 +56,3 @@ services:
 volumes:
   aztec-validator-data:
   aztec-validator-crs:
-  aztec-validator-keystore:
