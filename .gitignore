@@ -3,3 +3,5 @@
 *.bak
 *.original
 custom.yml
+aztec-validator-keystore/*
+!aztec-validator-keystore/.gitkeep
