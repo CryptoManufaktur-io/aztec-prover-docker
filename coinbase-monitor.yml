@@ -1,0 +1,24 @@
+x-logging: &logging
+  logging:
+    driver: json-file
+    options:
+      max-size: 100m
+      max-file: "3"
+      tag: '{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}'
+
+services:
+  coinbase-monitor:
+    restart: unless-stopped
+    build:
+      context: ./coinbase-monitor
+      dockerfile: Dockerfile
+    volumes:
+      - ./aztec-validator-keystore:/keystore
+    environment:
+      PROVIDER_ID: ${PROVIDER_ID}
+      STAKING_API_URL: ${STAKING_API_URL}
+      MONITOR_POLL_INTERVAL: ${MONITOR_POLL_INTERVAL:-300}
+      SLACK_WEBHOOK_URL: ${SLACK_WEBHOOK_URL:-}
+      KEYSTORE_PATH: /keystore
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+    <<: *logging
