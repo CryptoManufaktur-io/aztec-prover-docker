@@ -2,6 +2,7 @@
 *.swp
 *.bak
 *.original
+*.pyc
 custom.yml
 aztec-validator-keystore/*
 !aztec-validator-keystore/.gitkeep
