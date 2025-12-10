@@ -180,6 +180,66 @@ Service resumed normal operation after 3 failed attempt(s).
 5. **Notify**: Sends Slack notifications for new delegations and updates
 6. **Save State**: Persists state to avoid duplicate notifications
 
+## Understanding Key Relationships
+
+### sequencers.json Structure
+
+Each validator in `sequencers.json` has:
+```json
+{
+  "attester": {
+    "eth": "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80",  // Private key (example)
+    "bls": "0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef"
+  },
+  "publisher": "0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890",
+  "feeRecipient": "0x0000000000000000000000000000000000000000000000000000000000000000",
+  "coinbase": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"  // Public address (attester address)
+}
+```
+
+- **`attester.eth`**: The private key (DO NOT share!)
+- **`coinbase`**: Initially set to the **public Ethereum address** derived from `attester.eth`
+
+### Deriving Public Address from Private Key
+
+To verify which attester address corresponds to a private key:
+
+**Using cast (Foundry):**
+```bash
+cast wallet address --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
+# Output: 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
+```
+
+**Using Python:**
+```bash
+pip install eth-account
+python3 -c "from eth_account import Account; print(Account.from_key('0xYOUR_PRIVATE_KEY_HERE').address)"
+```
+
+**Using Node.js (ethers):**
+```bash
+node -e "console.log(new (require('ethers').Wallet)('0xYOUR_PRIVATE_KEY_HERE').address)"
+```
+
+> **Note:** The example key `0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80` is the well-known Hardhat/Foundry test account #0. Never use test keys in production!
+
+### How Matching Works
+
+1. When you generate keys with `aztec validator-keys new`, `coinbase` is automatically set to the public address derived from `attester.eth`
+2. When you stake, this address becomes the `attesterAddress` on-chain
+3. The API returns `attesterAddress` → `splitContractAddress` mappings
+4. The monitor matches `coinbase` in `sequencers.json` with `attesterAddress` from the API
+5. When matched, it replaces `coinbase` with the `splitContractAddress`
+
+### Example Flow
+
+| Step | coinbase value | Description |
+|------|---------------|-------------|
+| 1. Key generation | `0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266` | Public address from private key |
+| 2. Staking | (same) | Registered on-chain as attester |
+| 3. Delegation | (same) | Delegator stakes, split contract created |
+| 4. Monitor update | `0xSplitContractAddress...` | Replaced with split contract |
+
 ## Important Notes
 
 ⚠️ **Restart Required**: After the monitor updates `sequencers.json`, you must restart your validator for changes to take effect:
