@@ -12,8 +12,10 @@ from pathlib import Path
 from unittest.mock import patch, MagicMock
 
 # Set up test environment before importing monitor
-TEST_DIR = tempfile.mkdtemp()
-os.environ["KEYSTORE_PATH"] = TEST_DIR
+TEST_KEYSTORE_DIR = tempfile.mkdtemp()
+TEST_DATA_DIR = tempfile.mkdtemp()
+os.environ["KEYSTORE_PATH"] = TEST_KEYSTORE_DIR
+os.environ["DATA_PATH"] = TEST_DATA_DIR
 os.environ["PROVIDER_ID"] = "123"
 os.environ["STAKING_API_URL"] = "https://example.com/api"
 os.environ["SLACK_WEBHOOK_URL"] = ""  # Disabled for testing
@@ -83,8 +85,8 @@ MOCK_SEQUENCERS = {
 
 
 def setup_test_files():
-    """Create test files in the temp directory."""
-    sequencers_file = Path(TEST_DIR) / "sequencers.json"
+    """Create test files in the temp directories."""
+    sequencers_file = Path(TEST_KEYSTORE_DIR) / "sequencers.json"
     with open(sequencers_file, "w") as f:
         json.dump(MOCK_SEQUENCERS, f, indent=2)
     print(f"✅ Created test sequencers.json at {sequencers_file}")
@@ -158,7 +160,7 @@ def test_update_sequencers_coinbase():
         print(f"  - {change['old_coinbase'][:10]}... -> {change['new_coinbase'][:10]}...")
 
     # Verify the file was updated
-    with open(Path(TEST_DIR) / "sequencers.json", "r") as f:
+    with open(Path(TEST_KEYSTORE_DIR) / "sequencers.json", "r") as f:
         updated_data = json.load(f)
 
     validators = updated_data["validators"]
@@ -227,8 +229,8 @@ def test_full_run_with_mock():
 
     setup_test_files()
 
-    # Reset state
-    state_file = Path(TEST_DIR) / "coinbase-monitor-state.json"
+    # Reset state (state files are in DATA_PATH, not KEYSTORE_PATH)
+    state_file = Path(TEST_DATA_DIR) / "coinbase-monitor-state.json"
     if state_file.exists():
         state_file.unlink()
 
@@ -242,11 +244,11 @@ def test_full_run_with_mock():
         assert success == True, "run_check should return True"
         mock_fetch.assert_called_once()
 
-    # Verify state was saved
+    # Verify state was saved (in DATA_PATH)
     assert state_file.exists(), "State file should exist"
 
-    # Verify mappings were saved
-    mappings_file = Path(TEST_DIR) / "coinbase-mappings.json"
+    # Verify mappings were saved (in DATA_PATH)
+    mappings_file = Path(TEST_DATA_DIR) / "coinbase-mappings.json"
     assert mappings_file.exists(), "Mappings file should exist"
 
     with open(mappings_file, "r") as f:
@@ -289,8 +291,9 @@ def cleanup():
     """Clean up test files."""
     import shutil
     try:
-        shutil.rmtree(TEST_DIR)
-        print(f"\n🧹 Cleaned up test directory: {TEST_DIR}")
+        shutil.rmtree(TEST_KEYSTORE_DIR)
+        shutil.rmtree(TEST_DATA_DIR)
+        print(f"\n🧹 Cleaned up test directories")
     except Exception as e:
         print(f"\n⚠️ Failed to clean up: {e}")
 
@@ -299,7 +302,8 @@ def main():
     """Run all tests."""
     print("=" * 60)
     print("Aztec Coinbase Monitor - Unit Tests")
-    print(f"Test directory: {TEST_DIR}")
+    print(f"Test keystore dir: {TEST_KEYSTORE_DIR}")
+    print(f"Test data dir: {TEST_DATA_DIR}")
     print("=" * 60)
 
     try:

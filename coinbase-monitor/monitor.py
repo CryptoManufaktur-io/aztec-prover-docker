@@ -24,6 +24,7 @@ STAKING_API_URL = os.getenv("STAKING_API_URL", "")
 MONITOR_POLL_INTERVAL = int(os.getenv("MONITOR_POLL_INTERVAL", "300"))  # seconds
 SLACK_WEBHOOK_URL = os.getenv("SLACK_WEBHOOK_URL", "")
 KEYSTORE_PATH = os.getenv("KEYSTORE_PATH", "/keystore")
+DATA_PATH = os.getenv("DATA_PATH", "/data")
 LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO").upper()
 
 # Error alerting configuration
@@ -31,9 +32,11 @@ ERROR_ALERT_THRESHOLD = int(os.getenv("ERROR_ALERT_THRESHOLD", "3"))  # Alert af
 ERROR_ALERT_COOLDOWN = int(os.getenv("ERROR_ALERT_COOLDOWN", "3600"))  # Seconds between error alerts (1 hour)
 
 # File paths
+# sequencers.json is in keystore (read/write)
 SEQUENCERS_FILE = Path(KEYSTORE_PATH) / "sequencers.json"
-STATE_FILE = Path(KEYSTORE_PATH) / "coinbase-monitor-state.json"
-MAPPINGS_FILE = Path(KEYSTORE_PATH) / "coinbase-mappings.json"
+# State and mappings files are in data volume (separate from keystore)
+STATE_FILE = Path(DATA_PATH) / "coinbase-monitor-state.json"
+MAPPINGS_FILE = Path(DATA_PATH) / "coinbase-mappings.json"
 
 # Setup logging
 logging.basicConfig(
@@ -470,6 +473,7 @@ def main() -> None:
     logger.info(f"API URL: {STAKING_API_URL}")
     logger.info(f"Poll Interval: {MONITOR_POLL_INTERVAL}s")
     logger.info(f"Keystore Path: {KEYSTORE_PATH}")
+    logger.info(f"Data Path: {DATA_PATH}")
     logger.info(f"Slack Notifications: {'Enabled' if SLACK_WEBHOOK_URL else 'Disabled'}")
     logger.info(f"Error Alert Threshold: {ERROR_ALERT_THRESHOLD} consecutive failures")
     logger.info(f"Error Alert Cooldown: {ERROR_ALERT_COOLDOWN}s")
@@ -478,6 +482,11 @@ def main() -> None:
     # Verify keystore path exists
     if not Path(KEYSTORE_PATH).exists():
         logger.error(f"Keystore path does not exist: {KEYSTORE_PATH}")
+        sys.exit(1)
+
+    # Verify data path exists
+    if not Path(DATA_PATH).exists():
+        logger.error(f"Data path does not exist: {DATA_PATH}")
         sys.exit(1)
 
     # Run initial check

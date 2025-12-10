@@ -54,7 +54,8 @@ This monitor:
 | `STAKING_API_URL` | `` | Staking Dashboard API URL (required) |
 | `MONITOR_POLL_INTERVAL` | `300` | Seconds between API polls (5 minutes) |
 | `SLACK_WEBHOOK_URL` | `` | Slack webhook URL for notifications |
-| `KEYSTORE_PATH` | `/keystore` | Path to the keystore directory (inside container) |
+| `KEYSTORE_PATH` | `/keystore` | Path to the keystore directory containing sequencers.json |
+| `DATA_PATH` | `/data` | Path for state/mappings files (Docker named volume) |
 | `LOG_LEVEL` | `INFO` | Logging level (DEBUG, INFO, WARNING, ERROR) |
 | `ERROR_ALERT_THRESHOLD` | `3` | Number of consecutive failures before alerting |
 | `ERROR_ALERT_COOLDOWN` | `3600` | Seconds between error alerts (1 hour) |
@@ -72,11 +73,24 @@ Then start both services:
 docker compose up -d
 ```
 
-## Output Files
+## Storage
 
-The monitor creates/updates these files in `aztec-validator-keystore/`:
+### Volumes
 
-### `coinbase-monitor-state.json`
+The monitor uses two separate volumes:
+
+| Volume | Path | Purpose |
+|--------|------|---------|
+| `./aztec-validator-keystore` | `/keystore` | Contains `sequencers.json` (read/write) |
+| `coinbase-monitor-data` (Docker named volume) | `/data` | State and mappings files |
+
+This keeps your `aztec-validator-keystore/` directory clean with only `sequencers.json`.
+
+### State Files (in Docker named volume)
+
+These files are stored in a Docker-managed volume and don't appear on your host filesystem:
+
+#### `coinbase-monitor-state.json`
 Tracks known stakes to prevent duplicate notifications:
 ```json
 {
@@ -87,12 +101,12 @@ Tracks known stakes to prevent duplicate notifications:
 }
 ```
 
-### `coinbase-mappings.json`
+#### `coinbase-mappings.json`
 Reference file with all current mappings:
 ```json
 {
   "last_updated": "2025-12-09T10:30:00Z",
-  "provider_id": "7",
+  "provider_id": "123",
   "mappings": [
     {
       "attester_address": "0x1c289f47AC8e0fF60eCef1A37b9B74B4687D3cC1",
@@ -102,6 +116,8 @@ Reference file with all current mappings:
   ]
 }
 ```
+
+**Note:** If the state files are lost (e.g., volume deleted), the only impact is a one-time re-notification of existing delegations. No functional impact occurs since `sequencers.json` already has the correct coinbase addresses.
 
 ## Slack Notifications
 
@@ -191,6 +207,16 @@ docker compose restart validator
 - Ensure the container has write access to `aztec-validator-keystore/`
 - Check file ownership and permissions
 
+### Inspect State Files
+Since state files are in a Docker named volume:
+```bash
+# View state file
+docker compose -f coinbase-monitor.yml exec coinbase-monitor cat /data/coinbase-monitor-state.json
+
+# View mappings file
+docker compose -f coinbase-monitor.yml exec coinbase-monitor cat /data/coinbase-mappings.json
+```
+
 ### View Logs
 ```bash
 # Follow logs
@@ -206,7 +232,8 @@ Run locally without Docker:
 ```bash
 cd coinbase-monitor
 pip install -r requirements.txt
-KEYSTORE_PATH=../aztec-validator-keystore PROVIDER_ID=<your-id> STAKING_API_URL=<api-url> python monitor.py
+mkdir -p /tmp/coinbase-data
+KEYSTORE_PATH=../aztec-validator-keystore DATA_PATH=/tmp/coinbase-data PROVIDER_ID=<your-id> STAKING_API_URL=<api-url> python monitor.py
 ```
 
 ## License
