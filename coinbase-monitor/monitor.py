@@ -141,7 +141,12 @@ def fetch_provider_data() -> tuple[dict[str, Any] | None, str | None]:
         logger.debug(f"Fetching provider data from {url}")
         response = requests.get(
             url,
-            headers={"User-Agent": "Aztec-Coinbase-Monitor/1.0"},
+            headers={
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+                "Accept": "application/json",
+                "Origin": "https://staking.aztec.network",
+                "Referer": "https://staking.aztec.network/"
+            },
             timeout=30
         )
         response.raise_for_status()
