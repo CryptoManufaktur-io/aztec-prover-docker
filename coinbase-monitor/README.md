@@ -147,7 +147,6 @@ Total Staked: 1,600,000 AZTEC
   Split Contract: 0xabcd1234...efgh5678
 
 ✅ sequencers.json has been automatically updated.
-⚠️ Restart your validator to apply changes.
 ```
 
 ### Error Alert
@@ -241,11 +240,6 @@ node -e "console.log(new (require('ethers').Wallet)('0xYOUR_PRIVATE_KEY_HERE').a
 | 4. Monitor update | `0xSplitContractAddress...` | Replaced with split contract |
 
 ## Important Notes
-
-⚠️ **Restart Required**: After the monitor updates `sequencers.json`, you must restart your validator for changes to take effect:
-```bash
-docker compose restart validator
-```
 
 ⚠️ **Backup**: The monitor modifies `sequencers.json`. Consider backing it up before first run.
 
