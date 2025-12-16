@@ -29,6 +29,29 @@ be run by the sequencer/validator process. These wallets do not need to be funde
 
 Make sure that `COMPOSE_FILE` includes `validator.yml`
 
+### Sequencer Keystore
+
+The validator requires a keystore file at `aztec-validator-keystore/sequencer.json`. For disaster recovery testing with dummy keys (not actual sequencing), create the file manually:
+
+```json
+{
+  "schemaVersion": 1,
+  "validators": [
+    {
+      "attester": {
+        "eth": "0x0000000000000000000000000000000000000000000000000000000000000001",
+        "bls": "0x0000000000000000000000000000000000000000000000000000000000000001"
+      },
+      "publisher": ["0x0000000000000000000000000000000000000000000000000000000000000001"],
+      "feeRecipient": "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "coinbase": "0x0000000000000000000000000000000000000001"
+    }
+  ]
+}
+```
+
+For production use, generate proper keys using the Aztec CLI. See the [Aztec keystore documentation](https://docs.aztec.network/the_aztec_network/operation/keystore/creating_keystores) for details.
+
 Wait for the validator to be fully synced: Check with `./aztecd logs -f validator` and look for a message telling
 you that it's up and listening on the aztec port 8080, and has peers.
 
