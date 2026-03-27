@@ -379,7 +379,7 @@ def send_update_notification(changes: list[dict], provider_name: str, total_stak
         f"*{len(changes)} coinbase address(es) updated:*\n\n" +
         "\n\n".join(change_lines) +
         f"\n\n✅ `sequencers.json` has been automatically updated.\n"
-        f"⚠️ *Restart your validator to apply changes.*"
+        f"The validator will pick up the new coinbase via hot-reload."
     )
 
     send_slack_notification(message)
