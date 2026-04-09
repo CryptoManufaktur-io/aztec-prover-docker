@@ -1,0 +1,28 @@
+x-logging: &logging
+  logging:
+    driver: json-file
+    options:
+      max-size: 100m
+      max-file: "3"
+      tag: '{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}'
+
+services:
+  slash-monitor:
+    restart: unless-stopped
+    build:
+      context: ./slash-monitor
+      dockerfile: Dockerfile
+    volumes:
+      - ./aztec-validator-keystore:/keystore:ro
+    environment:
+      L1_RPC_URL: ${L1_RPC}
+      KEYSTORE_PATH: /keystore
+      POLL_INTERVAL: ${SLASH_MONITOR_POLL_INTERVAL:-900}
+      NETWORK: ${NETWORK:-mainnet}
+      METRICS_PORT: 9101
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+    labels:
+      - metrics.scrape=true
+      - metrics.path=/metrics
+      - metrics.port=9101
+    <<: *logging
