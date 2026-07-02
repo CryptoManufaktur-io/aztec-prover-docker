@@ -1,0 +1,27 @@
+x-logging: &logging
+  logging:
+    driver: json-file
+    options:
+      max-size: 100m
+      max-file: "3"
+      tag: '{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}'
+
+services:
+  provider-key-monitor:
+    restart: unless-stopped
+    build:
+      context: ./provider-key-monitor
+      dockerfile: Dockerfile
+    environment:
+      PROVIDER_ID: ${PROVIDER_ID}
+      L1_RPC_URL: ${L1_RPC}
+      NETWORK: ${PROVIDER_KEY_MONITOR_NETWORK:-mainnet}
+      PROVIDER_QUEUE_CONTRACT_ADDRESS: ${PROVIDER_QUEUE_CONTRACT_ADDRESS:-}
+      PROVIDER_KEY_MONITOR_POLL_INTERVAL: ${PROVIDER_KEY_MONITOR_POLL_INTERVAL:-300}
+      METRICS_PORT: ${PROVIDER_KEY_MONITOR_METRICS_PORT:-9102}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+    labels:
+      - metrics.scrape=true
+      - metrics.path=/metrics
+      - metrics.port=${PROVIDER_KEY_MONITOR_METRICS_PORT:-9102}
+    <<: *logging
