@@ -12,6 +12,14 @@ When one of the local validator addresses is targeted, the exported metrics incl
 
 The on-chain action data used here includes the targeted validator and slash amount. It does not include an offense reason, so the monitor can show which address is going to be slashed or has been slashed, but it cannot explain why the slash was proposed.
 
+### Round status interpretation
+
+- `aztec_slashing_round_status = 2` means quorum has been reached.
+- `aztec_slashing_round_status = 3` means the round is in the veto window.
+- `aztec_slashing_round_status = 4` means the round is executable, effectively slashable now.
+- `aztec_slashing_round_status = 5` means the round has executed, effectively slashed.
+- `aztec_slashing_round_is_executed = 1` confirms execution for that round.
+
 ## Metrics
 
 | Metric | Description |
