@@ -40,7 +40,7 @@ CONTRACTS = {
     "testnet": {
         "tally": "0xcA49e32bc2926c3F2Ef67E1647Fa14a8ebf34065",
         "slasher": "0x89684502e6A5fD3f1e4B3C610429F6E2C181c6ba",
-        "rollup": "0x66A41CB55F9a1e38A45A2Ac8685F12A61fBFab77",
+        "rollup": "0xfe6061806cac748085904a010d2d9e33b8031741",
     },
 }
 
