@@ -22,9 +22,6 @@ jobs:
       - name: Fill in variables
         run: |
           source ./.github/helper.sh
-          PROVER_ID=0x01
-          var=PROVER_ID
-          set_value_in_env
           L1_WALLET_PRIVATE_KEY=0x02
           var=L1_WALLET_PRIVATE_KEY
           set_value_in_env
@@ -33,3 +30,7 @@ jobs:
           set_value_in_env
       - name: Test ethd update
         run: ./ethd update --debug --non-interactive
+      - name: Test slash monitor
+        run: |
+          docker build --target test -t aztec-slash-monitor-test ./slash-monitor
+          docker run --rm aztec-slash-monitor-test

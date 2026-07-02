@@ -1,18 +1,9 @@
 # Aztec Prover Docker
 
-Docker Compose for an Aztec Prover and/or Sequencer.
+Docker Compose for an Aztec Sequencer/Validator and optional monitoring sidecars.
 
 Meant to be used with [central-proxy-docker](https://github.com/CryptoManufaktur-io/central-proxy-docker) for traefik
 and Prometheus remote write; use `:ext-network.yml` in `COMPOSE_FILE` inside `.env` in that case.
-
-## Quick setup for Prover
-
-Run `cp default.env .env`, then `nano .env`, and update values like `L1_RPC`, `L1_REST`, `L1_WALLET_PRIVATE_KEY`,
-and the `NETWORK` as well as the `BLOB_SINK_URL` and `PUBLIC_IP_ADDRESS`.
-
-`L1_WALLET_PRIVATE_KEY` is the private key of an L1 wallet, and will be used to pay gas.
-
-If you want the broker node port exposed unencrypted to the host, use `broker-shared.yml` in `COMPOSE_FILE` inside `.env`.
 
 ## Quick setup for Sequencer / Validator
 
@@ -72,22 +63,16 @@ apply when the container merely restarts: It needs to be recreated by Compose wi
 the pull policy to grab an updated image.
 
 Aztec Prover Docker uses `--auto-update config` with Aztec, where it will terminate the process if the
-config changed but the required version did not, and offers watchtower to handle the Docker image update on a
-tag like `latest`. `watchtower.yml` should run with one and only one copy on the host in that case, and
-`AZTEC_AUTOUPDATE=true` should be set in `.env`, which it is by default.
+config changed but the required version did not. `AZTEC_AUTOUPDATE=true` adds watchtower labels for installations
+that already run a host-level watchtower service.
 
-Note `AZTEC_AUTOUPDATE` only controls whether the Aztec images will be updated by watchtower. The auto-update
+Note `AZTEC_AUTOUPDATE` only controls whether an external watchtower should update the Aztec images. The auto-update
 function that does not pull a new image, `--auto-update config`, is always active.
 
 ## Architecture
 
-You'll have one Broker and Node, and N agents. Only the Broker and Node keep state; they can also be on a relatively low-powered machine - 6 cores, 32 GiB RAM. The agents connect
-to the broker and should be, for testnet, on 16-core/32-thread EPYC with 128 GiB RAM.
-
-The broker can be exposed directly to the host or via traefik. In either case, it should only be reachable by your agents: Configure firewalling so it is not Internet-reachable.
-
-The validator/sequencer is stand-alone. While it is possible to have the prover node use the sequencer node, instead
-of having its own P2P, we've opted not to do that. That way, the prover does not depend on the sequencer being live.
+The validator/sequencer is stand-alone and keeps its own data and keystore volumes. Optional monitoring sidecars can
+be added to `COMPOSE_FILE` when those metrics are needed.
 
 ## Customization
 
