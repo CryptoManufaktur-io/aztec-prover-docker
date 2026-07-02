@@ -4,6 +4,14 @@ Read-only Prometheus exporter for Aztec on-chain slashing state.
 
 The monitor polls the Aztec L1 slashing contracts and checks whether any locally configured validator attester is targeted in active slashing rounds. It does not submit transactions, vote, veto, or modify validator configuration.
 
+## Targeting scope
+
+The monitor reads local attester private keys from `sequencers.json` or `sequencer.json` in the mounted keystore and derives the corresponding validator addresses. It only checks those local validator addresses; it does not query a provider ID or discover every sequencer assigned to a provider account.
+
+When one of the local validator addresses is targeted, the exported metrics include the slashing round, validator address, slash amount, and round status. The status indicates whether the round is still voting, has reached quorum, is in the veto window, is executable, or has already executed.
+
+The on-chain action data used here includes the targeted validator and slash amount. It does not include an offense reason, so the monitor can show which address is going to be slashed or has been slashed, but it cannot explain why the slash was proposed.
+
 ## Metrics
 
 | Metric | Description |
