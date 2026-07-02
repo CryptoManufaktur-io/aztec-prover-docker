@@ -25,16 +25,13 @@ RPC_TIMEOUT = int(os.getenv("RPC_TIMEOUT", "30"))
 
 CONTRACTS = {
     "mainnet": {
-        "rollup": "0xAe2001f7e21d5EcABf6234E9FDd1E76F50F74962",
-    },
-    "testnet": {
-        "rollup": "0x66A41CB55F9a1e38A45A2Ac8685F12A61fBFab77",
+        "staking_registry": "0x042dF8f42790d6943F41C25C2132400fd727f452",
     },
 }
 
 PROVIDER_QUEUE_CONTRACT_ADDRESS = os.getenv(
     "PROVIDER_QUEUE_CONTRACT_ADDRESS",
-    CONTRACTS.get(NETWORK, {}).get("rollup", ""),
+    CONTRACTS.get(NETWORK, {}).get("staking_registry", ""),
 )
 
 QUEUE_LENGTH_SIGNATURES = (

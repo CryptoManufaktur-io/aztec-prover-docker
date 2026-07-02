@@ -24,7 +24,7 @@ alert thresholds, severity, routing, and no-data behavior.
 | `NETWORK` | `mainnet` | Network used to select default contract addresses |
 | `MONITOR_POLL_INTERVAL` | `300` | Seconds between provider queue polls |
 | `METRICS_PORT` | `9102` | Prometheus metrics port |
-| `PROVIDER_QUEUE_CONTRACT_ADDRESS` | network default | Optional override for the queue contract address |
+| `PROVIDER_QUEUE_CONTRACT_ADDRESS` | network default | Optional override for the staking registry address. Required for networks without a verified default. |
 | `LOG_LEVEL` | `INFO` | Logging level |
 | `RPC_TIMEOUT` | `30` | Per-RPC timeout in seconds |
 
