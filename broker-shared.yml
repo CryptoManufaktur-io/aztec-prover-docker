@@ -1,5 +1,0 @@
-# To be used with broker.yml
-services:
-  broker:
-    ports:
-      - ${SHARE_IP:-}:${BROKER_PORT:-8080}:${BROKER_PORT:-8080}/tcp
