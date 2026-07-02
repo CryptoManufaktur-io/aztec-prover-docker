@@ -18,6 +18,12 @@ import monitor
 
 
 class ProviderMonitorTests(unittest.TestCase):
+    def test_mainnet_default_uses_staking_registry(self):
+        self.assertEqual(
+            monitor.PROVIDER_QUEUE_CONTRACT_ADDRESS,
+            "0x042dF8f42790d6943F41C25C2132400fd727f452",
+        )
+
     def test_parse_rpc_urls(self):
         self.assertEqual(
             monitor.parse_rpc_urls(" https://a.example,https://b.example, "),
