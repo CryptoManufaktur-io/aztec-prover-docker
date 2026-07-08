@@ -58,6 +58,30 @@ MOCK_PROVIDER_DATA = {
     ]
 }
 
+MOCK_AZTEC_PROVIDER_DATA = {
+    "id": "74",
+    "name": "GalaxyDigital",
+    "totalStaked": "9000000000000000000000000",
+    "delegators": 45,
+    "stakes": [
+        {
+            "atpAddress": "0xAtpAddress",
+            "attesterAddress": "0x5555555555555555555555555555555555555555",
+            "beneficiary": "0xBeneficiary",
+            "blockNumber": "25466224",
+            "providerRewardsRecipient": "0x164caE65507647a18ab58d97d9dE1dE7778aE899",
+            "providerTakeRate": 2500,
+            "rollupAddress": "0xRollup",
+            "source": "atp",
+            "splitContractAddress": "0xDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD",
+            "stakedAmount": "200000000000000000000000",
+            "stakerAddress": "0xStaker",
+            "timestamp": 1783390425,
+            "txHash": "0xTx4",
+        }
+    ],
+}
+
 # Mock sequencers.json - coinbase initially set to attester addresses
 MOCK_SEQUENCERS = {
     "schemaVersion": 1,
@@ -91,6 +115,26 @@ def setup_test_files():
         json.dump(MOCK_SEQUENCERS, f, indent=2)
     print(f"✅ Created test sequencers.json at {sequencers_file}")
     return sequencers_file
+
+
+def test_build_provider_url():
+    """Test provider URL construction."""
+    print("\n📋 Test: build_provider_url")
+
+    assert monitor.build_provider_url("https://example.com/api", "123") == (
+        "https://example.com/api/providers/123"
+    )
+    assert monitor.build_provider_url("https://example.com/api/", "123") == (
+        "https://example.com/api/providers/123"
+    )
+    assert monitor.build_provider_url("https://api.stake.aztec.network", "74") == (
+        "https://api.stake.aztec.network/api/providers/74"
+    )
+    assert monitor.build_provider_url("https://api.stake.aztec.network/", "74") == (
+        "https://api.stake.aztec.network/api/providers/74"
+    )
+
+    print("✅ Provider URL construction works correctly")
 
 
 def test_normalize_address():
@@ -135,6 +179,25 @@ def test_process_stakes():
 
     print("  Second run correctly detected 0 new stakes")
     print("✅ Stake processing works correctly")
+
+
+def test_process_aztec_provider_shape():
+    """Test current Aztec provider payload shape."""
+    print("\n📋 Test: process_aztec_provider_shape")
+
+    state = {"known_stakes": {}, "last_updated": None}
+    all_mappings, new_or_changed = monitor.process_stakes(MOCK_AZTEC_PROVIDER_DATA, state)
+
+    assert len(all_mappings) == 1, f"Expected 1 mapping, got {len(all_mappings)}"
+    assert len(new_or_changed) == 1, f"Expected 1 new mapping, got {len(new_or_changed)}"
+    assert all_mappings[0]["attester_address"] == "0x5555555555555555555555555555555555555555"
+    assert all_mappings[0]["split_contract"] == "0xDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"
+    assert all_mappings[0]["staked_amount"] == "200000000000000000000000"
+    assert all_mappings[0]["staker_address"] == "0xStaker"
+    assert all_mappings[0]["tx_hash"] == "0xTx4"
+    assert all_mappings[0]["block_number"] == "25466224"
+
+    print("✅ Current Aztec provider payload shape works correctly")
 
 
 def test_update_sequencers_coinbase():
@@ -307,9 +370,11 @@ def main():
     print("=" * 60)
 
     try:
+        test_build_provider_url()
         test_normalize_address()
         test_format_amount()
         test_process_stakes()
+        test_process_aztec_provider_shape()
         test_update_sequencers_coinbase()
         test_state_persistence()
         test_error_alerting()

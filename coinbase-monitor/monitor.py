@@ -128,6 +128,14 @@ def send_recovery_alert() -> None:
     error_state["was_in_error_state"] = False
 
 
+def build_provider_url(api_url: str, provider_id: str) -> str:
+    """Build the provider details URL from a host or /api base URL."""
+    base_url = api_url.rstrip("/")
+    if not base_url.endswith("/api"):
+        base_url = f"{base_url}/api"
+    return f"{base_url}/providers/{provider_id}"
+
+
 def fetch_provider_data() -> tuple[dict[str, Any] | None, str | None]:
     """
     Fetch provider data from the Staking Dashboard API.
@@ -135,7 +143,7 @@ def fetch_provider_data() -> tuple[dict[str, Any] | None, str | None]:
     Returns:
         Tuple of (data, error_message). If successful, error_message is None.
     """
-    url = f"{STAKING_API_URL}/providers/{PROVIDER_ID}"
+    url = build_provider_url(STAKING_API_URL, PROVIDER_ID)
 
     try:
         logger.debug(f"Fetching provider data from {url}")
