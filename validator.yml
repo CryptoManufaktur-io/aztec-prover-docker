@@ -46,7 +46,6 @@ services:
       - --sequencer.keyStoreDirectory
       - /keystore
       - --node
-      - --archiver
       - --sequencer
     command: ${SEQUENCER_EXTRAS}
     <<: *logging
